@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:17
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB: dashboarddb
+    volumes:
+      - postgres_data:/var/lib/postgresql@17/data
+      - ./init:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    secrets:
+      - db_password
+    ports:
+      - 5423:5432
+
+secrets:
+  db_password:
+    file: db_password
+
+volumes:
+  postgres_data:
