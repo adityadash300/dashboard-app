@@ -8,10 +8,10 @@ services:
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     container_name: postgres
+    user: postgres
     environment:
-      POSTGRES_USER: admin
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD_FILE: /run/secrets/db_password
-      POSTGRES_DB: dashboarddb
     volumes:
       - postgres_data:/var/lib/postgresql@17/data
       - ./init:/docker-entrypoint-initdb.d/
@@ -23,8 +23,22 @@ services:
     secrets:
       - db_password
     ports:
-      - 5423:5432
+      - 5432:5432
 
+  pgadmin4:
+    image: elestio/pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: adityadash300@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pgAdminPass
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+    - 8080:8080
+    volumes:
+    - ./servers.json:/pgadmin4/servers.json
+
+
+# Create a file named db_password relative to docker compose file to run the image
 secrets:
   db_password:
     file: db_password
