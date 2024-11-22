@@ -13,7 +13,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD_FILE: /run/secrets/db_password
     volumes:
-      - postgres_data:/var/lib/postgresql@17/data
+      - postgres_data:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
@@ -28,6 +28,7 @@ services:
   pgadmin4:
     image: elestio/pgadmin
     restart: always
+    container_name: pgAdmin
     environment:
       PGADMIN_DEFAULT_EMAIL: adityadash300@gmail.com
       PGADMIN_DEFAULT_PASSWORD: pgAdminPass
@@ -35,7 +36,7 @@ services:
     ports:
     - 8080:8080
     volumes:
-    - ./servers.json:/pgadmin4/servers.json
+    - pg_admin_data:/pgadmin4/
 
 
 # Create a file named db_password relative to docker compose file to run the image
@@ -45,3 +46,4 @@ secrets:
 
 volumes:
   postgres_data:
+  pg_admin_data:
