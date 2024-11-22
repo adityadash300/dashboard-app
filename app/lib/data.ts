@@ -11,10 +11,10 @@ import {
 import { formatCurrency } from './utils';
 
 const client = new Client(process.env.POSTGRES_URL);
+await client.connect();
 
 export async function fetchRevenue() {
   try {
-    await client.connect();
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
