@@ -135,11 +135,11 @@ export async function fetchInvoicesPages(query: string) {
     FROM invoices
     JOIN customers ON invoices.customer_id = customers.id
     WHERE
-      customers.name ILIKE '%' || $1 '%' OR
-      customers.email ILIKE '%' || $1 '%' OR
-      invoices.amount::text ILIKE '%' || $1 '%' OR
-      invoices.date::text ILIKE '%' || $1 '%' OR
-      invoices.status ILIKE '%' || $1 '%'
+      customers.name ILIKE '%' || $1 || '%' OR
+      customers.email ILIKE '%' || $1 || '%' OR
+      invoices.amount::text ILIKE '%' || $1 || '%' OR
+      invoices.date::text ILIKE '%' || $1 || '%' OR
+      invoices.status ILIKE '%' || $1 || '%'
   `, [query]);
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
