@@ -175,23 +175,23 @@ export async function fetchInvoicesPages(query: string) {
 //   }
 // }
 
-// export async function fetchCustomers() {
-//   try {
-//     const data = await sql<CustomerField>`
-//       SELECT
-//         id,
-//         name
-//       FROM customers
-//       ORDER BY name ASC
-//     `;
+export async function fetchCustomers() {
+  try {
+    const data = await client.query<CustomerField>(`
+      SELECT
+        id,
+        name
+      FROM customers
+      ORDER BY name ASC
+    `);
 
-//     const customers = data.rows;
-//     return customers;
-//   } catch (err) {
-//     console.error('Database Error:', err);
-//     throw new Error('Failed to fetch all customers.');
-//   }
-// }
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
+  }
+}
 
 // export async function fetchFilteredCustomers(query: string) {
 //   try {
