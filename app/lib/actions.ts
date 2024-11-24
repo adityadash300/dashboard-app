@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { insertInvoice } from './data';
+import { insertInvoice, updateInvoiceInDb } from './data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -24,6 +24,23 @@ export async function createInvoice(formData: FormData) {
     const date = new Date().toISOString().split('T')[0]
 
     await insertInvoice({ customerId, amountInCents, status, date });
+
+    revalidatePath('/dashboard/invoice')
+    redirect('/dashboard/invoice')
+}
+
+const UpdateInvoice = FormSchema.omit({ id: true, date: true })
+
+export async function updateInvoice(id: string, formData: FormData) {
+    const { customerId, amount, status } = UpdateInvoice.parse({
+        customerId: formData.get('customerId'),
+        amount: formData.get('amount'),
+        status: formData.get('status'),
+    });
+
+    const amountInCents = amount * 100;
+
+    await updateInvoiceInDb({ customerId, amountInCents, status }, id)
 
     revalidatePath('/dashboard/invoice')
     redirect('/dashboard/invoice')
