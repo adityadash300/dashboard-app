@@ -37,8 +37,8 @@ export async function createInvoice(formData: FormData) {
         }
     }
 
-    revalidatePath('/dashboard/invoice')
-    redirect('/dashboard/invoice')
+    revalidatePath('/dashboard/invoices')
+    redirect('/dashboard/invoices')
 }
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true })
@@ -64,20 +64,21 @@ export async function updateInvoice(id: string, formData: FormData) {
         }
     }
 
-    revalidatePath('/dashboard/invoice')
-    redirect('/dashboard/invoice')
+    revalidatePath('/dashboard/invoices')
+    redirect('/dashboard/invoices')
 }
 
 export async function deleteInvoice(id: string) {
+    // throw new Error('Stimulated Error')
     try {
         const data = await client.query(`
           DELETE FROM invoices WHERE id = $1  
         `, [id])
-      } catch (err) {
+    } catch (err) {
         return {
             message: 'Database Error: Failed to delete invoice'
         }
-      }
+    }
 
-    revalidatePath('/dashboard/invoice')
+    revalidatePath('/dashboard/invoices')
 }
