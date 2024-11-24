@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  { name: 'Invoices', href: '/dashboard/invoice', icon: DocumentDuplicateIcon },
+  { name: 'Invoices', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Customers', href: '/dashboard/customer', icon: UserGroupIcon },
 ];
 
@@ -29,7 +29,7 @@ export default function NavLinks() {
             href={link.href}
             className={clsx('flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
-                'text-blue-600' : pathName === link.href
+                'text-blue-600': pathName === link.href
               },
             )}
           >
