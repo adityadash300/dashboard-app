@@ -1,9 +1,12 @@
 'use server';
 
 import { z } from 'zod';
-import { insertInvoice, removeInvoice, updateInvoiceInDb } from './data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { Client } from 'pg';
+
+const client = new Client(process.env.POSTGRES_URL);
+await client.connect();
 
 const FormSchema = z.object({
     id: z.string(),
@@ -23,7 +26,16 @@ export async function createInvoice(formData: FormData) {
     const amountInCents = amount * 100
     const date = new Date().toISOString().split('T')[0]
 
-    await insertInvoice({ customerId, amountInCents, status, date });
+    try {
+        const data = await client.query(`
+          INSERT INTO invoices (customer_id, amount, status, date)
+          VALUES ($1, $2, $3, $4)
+        `, [customerId, amountInCents, status, date]);
+    } catch (err) {
+        return {
+            message: 'Database Error: Failed to create invoice'
+        }
+    }
 
     revalidatePath('/dashboard/invoice')
     redirect('/dashboard/invoice')
@@ -40,14 +52,32 @@ export async function updateInvoice(id: string, formData: FormData) {
 
     const amountInCents = amount * 100;
 
-    await updateInvoiceInDb({ customerId, amountInCents, status }, id)
+    try {
+        const data = await client.query(`
+          UPDATE invoices
+          SET customer_id = $1, amount = $2, status = $3
+          WHERE id = $4]
+          `, [customerId, amountInCents, status, id])
+    } catch (err) {
+        return {
+            message: 'Database Error: Failed to update invoice'
+        }
+    }
 
     revalidatePath('/dashboard/invoice')
     redirect('/dashboard/invoice')
 }
 
-export async function deleteInvoice(id:string) {
-    await removeInvoice(id)
+export async function deleteInvoice(id: string) {
+    try {
+        const data = await client.query(`
+          DELETE FROM invoices WHERE id = $1  
+        `, [id])
+      } catch (err) {
+        return {
+            message: 'Database Error: Failed to delete invoice'
+        }
+      }
 
     revalidatePath('/dashboard/invoice')
 }

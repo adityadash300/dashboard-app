@@ -193,52 +193,6 @@ export async function fetchCustomers() {
   }
 }
 
-export async function insertInvoice(invoice: {
-  customerId: string,
-  amountInCents: number,
-  status: 'pending' | 'paid',
-  date: string
-}) {
-  try {
-    const data = await client.query(`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES ($1, $2, $3, $4)
-    `, [invoice.customerId, invoice.amountInCents, invoice.status, invoice.date]);
-
-    return data.rowCount || 0;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to insert invoice')
-  }
-}
-
-export async function updateInvoiceInDb(invoice: {
-  customerId: string,
-  amountInCents: number,
-  status: "paid" | "pending"
-}, id: string) {
-  try {
-    const data = await client.query(`
-      UPDATE invoices
-      SET customer_id = $1, amount = $2, status = $3
-      WHERE id = $4
-      `, [invoice.customerId, invoice.amountInCents, invoice.status, id])
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to update invoice')
-  }
-}
-
-export async function removeInvoice(id: string) {
-  try {
-    const data = await client.query(`
-      DELETE FROM invoices WHERE id = $1  
-    `, [id])
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to delete invoice')
-  }
-}
 
 // export async function fetchFilteredCustomers(query: string) {
 //   try {
