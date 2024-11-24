@@ -1,12 +1,11 @@
 
-import { Client, QueryResult } from 'pg';
+import { Client } from 'pg';
 import {
   CustomerField,
-  CustomersTableType,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Revenue,
+  Revenue
 } from './definitions';
 import { formatCurrency } from './utils';
 

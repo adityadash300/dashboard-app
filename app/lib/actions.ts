@@ -27,13 +27,14 @@ export async function createInvoice(formData: FormData) {
     const date = new Date().toISOString().split('T')[0]
 
     try {
-        const data = await client.query(`
+        await client.query(`
           INSERT INTO invoices (customer_id, amount, status, date)
           VALUES ($1, $2, $3, $4)
         `, [customerId, amountInCents, status, date]);
     } catch (err) {
         return {
-            message: 'Database Error: Failed to create invoice'
+            message: 'Database Error: Failed to create invoice',
+            error: err
         }
     }
 
@@ -53,14 +54,15 @@ export async function updateInvoice(id: string, formData: FormData) {
     const amountInCents = amount * 100;
 
     try {
-        const data = await client.query(`
+        await client.query(`
           UPDATE invoices
           SET customer_id = $1, amount = $2, status = $3
           WHERE id = $4]
           `, [customerId, amountInCents, status, id])
     } catch (err) {
         return {
-            message: 'Database Error: Failed to update invoice'
+            message: 'Database Error: Failed to update invoice',
+            error: err
         }
     }
 
@@ -71,12 +73,13 @@ export async function updateInvoice(id: string, formData: FormData) {
 export async function deleteInvoice(id: string) {
     // throw new Error('Stimulated Error')
     try {
-        const data = await client.query(`
+        await client.query(`
           DELETE FROM invoices WHERE id = $1  
         `, [id])
     } catch (err) {
         return {
-            message: 'Database Error: Failed to delete invoice'
+            message: 'Database Error: Failed to delete invoice',
+            error: err
         }
     }
 

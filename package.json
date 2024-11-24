@@ -29,7 +29,9 @@
     "@types/node": "20.14.8",
     "@types/pg": "^8.11.10",
     "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3"
   },
   "pnpm": {
     "overrides": {
