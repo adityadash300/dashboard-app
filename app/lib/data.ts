@@ -224,10 +224,21 @@ export async function updateInvoiceInDb(invoice: {
       WHERE id = $4
       `, [invoice.customerId, invoice.amountInCents, invoice.status, id])
   } catch (err) {
-
+    console.error('Database Error:', err);
+    throw new Error('Failed to update invoice')
   }
 }
 
+export async function removeInvoice(id: string) {
+  try {
+    const data = await client.query(`
+      DELETE FROM invoices WHERE id = $1  
+    `, [id])
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to delete invoice')
+  }
+}
 
 // export async function fetchFilteredCustomers(query: string) {
 //   try {
