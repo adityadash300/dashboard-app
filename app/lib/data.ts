@@ -212,6 +212,22 @@ export async function insertInvoice(invoice: {
   }
 }
 
+export async function updateInvoiceInDb(invoice: {
+  customerId: string,
+  amountInCents: number,
+  status: "paid" | "pending"
+}, id: string) {
+  try {
+    const data = await client.query(`
+      UPDATE invoices
+      SET customer_id = $1, amount = $2, status = $3
+      WHERE id = $4
+      `, [invoice.customerId, invoice.amountInCents, invoice.status, id])
+  } catch (err) {
+
+  }
+}
+
 
 // export async function fetchFilteredCustomers(query: string) {
 //   try {
